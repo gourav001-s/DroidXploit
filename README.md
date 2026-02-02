@@ -57,7 +57,7 @@ Each module assists the tester instead of hiding what happens internally.
 ```bash
 git clone https://github.com/gourav001-s/droidxploit.git
 cd droidxploit
-python3 androidxploit.py
+python3 adb_osint.py
 
 ```
 Ensure:
