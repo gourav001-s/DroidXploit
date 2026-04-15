@@ -1,5 +1,6 @@
 import os
 import sys
+ import subprocess
 
 # ==================================================
 # Terminal Colors
@@ -17,6 +18,13 @@ class C:
 # ==================================================
 # Helpers
 # ==================================================
+# Helper to run commands safely without breaking the UI
+def run_cmd(cmd):
+    try:
+        # Executes command and keeps the terminal output clean
+        subprocess.run(cmd, shell=True)
+    except Exception as e:
+        print(f"Error: {e}")
 def pause():
     input(C.YELLOW + "\nPress ENTER to continue..." + C.RESET)
 
@@ -44,12 +52,10 @@ def enum_device():
     cmds = [
         "adb devices",
         "adb shell id",
-        "adb shell getprop ro.build.version.release",
-        "adb shell getprop ro.build.version.sdk",
-        "adb shell uname -a"
+        "adb shell getprop ro.build.version.release"
     ]
     for c in cmds:
-        os.system(c)
+        run_cmd(c) # Using our new helper
     pause()
 
 def enum_apps():
@@ -59,8 +65,9 @@ def enum_apps():
 
 def dump_app_data():
     pkg = input("Package name: ").strip()
+    if not pkg: return
     print(C.GREEN + "\n[+] Dumping App Data\n" + C.RESET)
-    os.system(f"adb pull /data/data/{pkg} dump_{pkg}")
+    run_cmd(f"adb pull /data/data/{pkg} dump_{pkg}")
     pause()
 
 def token_hunter():
